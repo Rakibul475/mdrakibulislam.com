@@ -37,7 +37,7 @@ for(let i=0;i<28;i++){const y=(Math.random()-.5)*7;const width=2.2*(1-Math.abs(y
 for(let i=0;i<nodes.length-1;i++){const pts=[nodes[i],nodes[(i+1+((Math.random()*5)|0))%nodes.length]];neural.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),lineMaterial))}
 
 let mouseX=0,mouseY=0,scroll=0,targetScroll=0;
-addEventListener('pointermove',e=>{mouseX=(e.clientX/innerWidth-.5);mouseY=(e.clientY/innerHeight-.5);const glow=document.querySelector('.cursor-glow');glow.style.left=e.clientX+'px';glow.style.top=e.clientY+'px'});
+addEventListener('pointermove',e=>{mouseX=(e.clientX/innerWidth-.5);mouseY=(e.clientY/innerHeight-.5);const glow=document.querySelector('.cursor-glow');if(glow){glow.style.left=e.clientX+'px';glow.style.top=e.clientY+'px'}});
 addEventListener('scroll',()=>targetScroll=scrollY/(document.documentElement.scrollHeight-innerHeight||1),{passive:true});
 
 const clock=new THREE.Clock();
@@ -57,3 +57,23 @@ if (window.gsap && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
   });
   gsap.to('.contact-orb',{scale:1.25,opacity:.75,ease:'none',scrollTrigger:{trigger:'.contact',start:'top bottom',end:'center center',scrub:1}});
 }
+
+const galaxyProjects = document.querySelectorAll('.galaxy-project');
+const detailType = document.querySelector('.galaxy-detail-type');
+const detailTitle = document.querySelector('.galaxy-detail-title');
+const detailCopy = document.querySelector('.galaxy-detail-copy');
+const detailTags = document.querySelector('.galaxy-detail-tags');
+
+galaxyProjects.forEach(project => {
+  project.addEventListener('click', () => {
+    galaxyProjects.forEach(item => item.classList.remove('active'));
+    project.classList.add('active');
+    detailType.textContent = project.dataset.type;
+    detailTitle.textContent = project.dataset.title;
+    detailCopy.textContent = project.dataset.copy;
+    detailTags.textContent = project.dataset.tags;
+    if (window.gsap && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      gsap.fromTo('.galaxy-detail', {opacity:.45, y:12}, {opacity:1, y:0, duration:.45, ease:'power2.out'});
+    }
+  });
+});
