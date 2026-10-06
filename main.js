@@ -58,23 +58,3 @@ if (window.gsap && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
   gsap.to('.contact-orb',{scale:1.25,opacity:.75,ease:'none',scrollTrigger:{trigger:'.contact',start:'top bottom',end:'center center',scrub:1}});
 }
 
-const galaxyProjects = document.querySelectorAll('.galaxy-project');
-const detailType = document.querySelector('.galaxy-detail-type');
-const detailTitle = document.querySelector('.galaxy-detail-title');
-const detailCopy = document.querySelector('.galaxy-detail-copy');
-const detailTags = document.querySelector('.galaxy-detail-tags');
-
-galaxyProjects.forEach(project => {
-  project.addEventListener('click', () => {
-    galaxyProjects.forEach(item => item.classList.remove('active'));
-    project.classList.add('active');
-    detailType.textContent = project.dataset.type;
-    detailTitle.textContent = project.dataset.title;
-    detailCopy.textContent = project.dataset.copy;
-    detailTags.textContent = project.dataset.tags;
-    if (window.gsap && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      gsap.fromTo('.galaxy-detail', {opacity:.45, y:12}, {opacity:1, y:0, duration:.45, ease:'power2.out'});
-    }
-  });
-});
-
