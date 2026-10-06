@@ -7,7 +7,7 @@ renderer.setSize(innerWidth, innerHeight);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 
 const scene = new THREE.Scene();
-scene.fog = new THREE.FogExp2(0x05020d, 0.032);
+scene.fog = new THREE.FogExp2(0x020305, 0.032);
 const camera = new THREE.PerspectiveCamera(52, innerWidth / innerHeight, .1, 120);
 camera.position.set(0, 0, 14);
 
@@ -15,7 +15,7 @@ const universe = new THREE.Group(); scene.add(universe);
 const starCount = innerWidth < 700 ? 1100 : 2400;
 const positions = new Float32Array(starCount * 3);
 const colors = new Float32Array(starCount * 3);
-const palette = [new THREE.Color(0x8257ff), new THREE.Color(0x3c75ff), new THREE.Color(0xff3158), new THREE.Color(0x9defff)];
+const palette = [new THREE.Color(0x34d5c5), new THREE.Color(0x12375b), new THREE.Color(0x59e5a0), new THREE.Color(0xc6f4e8)];
 for (let i=0;i<starCount;i++) {
   const r = 8 + Math.random()*42, a=Math.random()*Math.PI*2, z=(Math.random()-.5)*55;
   positions[i*3]=Math.cos(a)*r; positions[i*3+1]=Math.sin(a)*r*.55; positions[i*3+2]=z;
@@ -24,14 +24,14 @@ for (let i=0;i<starCount;i++) {
 const geo=new THREE.BufferGeometry(); geo.setAttribute('position',new THREE.BufferAttribute(positions,3)); geo.setAttribute('color',new THREE.BufferAttribute(colors,3));
 const stars=new THREE.Points(geo,new THREE.PointsMaterial({size:.045,vertexColors:true,transparent:true,opacity:.8,blending:THREE.AdditiveBlending,depthWrite:false})); universe.add(stars);
 
-const core = new THREE.Mesh(new THREE.IcosahedronGeometry(2.2,4),new THREE.MeshBasicMaterial({color:0x7142ff,wireframe:true,transparent:true,opacity:.16,blending:THREE.AdditiveBlending}));
+const core = new THREE.Mesh(new THREE.IcosahedronGeometry(2.2,4),new THREE.MeshBasicMaterial({color:0x34d5c5,wireframe:true,transparent:true,opacity:.16,blending:THREE.AdditiveBlending}));
 core.position.set(5.5,.3,-3); universe.add(core);
-const halo = new THREE.Mesh(new THREE.TorusGeometry(3.8,.012,8,180),new THREE.MeshBasicMaterial({color:0xff3158,transparent:true,opacity:.38})); halo.position.copy(core.position); halo.rotation.x=1.15; universe.add(halo);
+const halo = new THREE.Mesh(new THREE.TorusGeometry(3.8,.012,8,180),new THREE.MeshBasicMaterial({color:0x59e5a0,transparent:true,opacity:.38})); halo.position.copy(core.position); halo.rotation.x=1.15; universe.add(halo);
 
 // Neural constellation—an abstract human/intelligence signal rather than a literal portrait.
 const neural = new THREE.Group(); neural.position.set(-5,-1,-5); universe.add(neural);
-const nodeMaterial = new THREE.MeshBasicMaterial({color:0x6fe7ff,transparent:true,opacity:.7});
-const lineMaterial = new THREE.LineBasicMaterial({color:0x7659ff,transparent:true,opacity:.23});
+const nodeMaterial = new THREE.MeshBasicMaterial({color:0x59e5a0,transparent:true,opacity:.7});
+const lineMaterial = new THREE.LineBasicMaterial({color:0x34d5c5,transparent:true,opacity:.23});
 const nodes=[];
 for(let i=0;i<28;i++){const y=(Math.random()-.5)*7;const width=2.2*(1-Math.abs(y)/8)+.35;const p=new THREE.Vector3((Math.random()-.5)*width,y,(Math.random()-.5)*1.2);nodes.push(p);const m=new THREE.Mesh(new THREE.SphereGeometry(.035,5,5),nodeMaterial);m.position.copy(p);neural.add(m)}
 for(let i=0;i<nodes.length-1;i++){const pts=[nodes[i],nodes[(i+1+((Math.random()*5)|0))%nodes.length]];neural.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),lineMaterial))}
@@ -77,3 +77,4 @@ galaxyProjects.forEach(project => {
     }
   });
 });
+
