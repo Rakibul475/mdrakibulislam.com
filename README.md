@@ -1,6 +1,16 @@
 # Rifath — Immersive Portfolio
 
-A cinematic personal portfolio for Md Rakibul Islam Rifath, built with Three.js, WebGL, GSAP, and ScrollTrigger.
+A living neural-network portfolio for Md Rakibul Islam Rifath, built with Three.js and WebGL.
+
+Around 2,600 particles form a network that fires as visitors move through it and reshapes for each section: a brain, the name RIFATH, one cluster per project, a helix for experience, and HELLO. Clicking a project cluster or card opens a project window with the challenge, the steps taken, why it mattered and a small interactive demo.
+
+## Files
+
+- `index.html` – page content
+- `neural.css` – styles
+- `projects.js` – the project list; add an entry here to add a cluster and project window
+- `neural.js` – the 3D network, section shapes and project windows
+- `project.html`, `school-projects.html`, `personal-projects.html` and their scripts are the previous design's pages, kept so old links keep working
 
 **Production domain:** `https://mdrakibulislam.com`
 
@@ -12,9 +22,9 @@ From the workspace root:
 python -m http.server 8000
 ```
 
-Open `http://localhost:8000/portfolio/`.
+Open `http://localhost:8000/`.
 
-The site uses CDN-hosted Three.js, GSAP, and Google Fonts, so an internet connection is required on first load.
+The site uses CDN-hosted Three.js and Google Fonts, so an internet connection is required on first load.
 
 ## Deploy
 
