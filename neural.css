@@ -102,6 +102,9 @@ footer{position:relative;z-index:2;max-width:1180px;margin:0 auto;padding-block:
 .clabel span{font-family:var(--f-display);font-weight:700;font-size:13px;line-height:1.2;text-shadow:0 0 12px var(--void),0 0 4px var(--void)}
 .clabel::before{content:"";width:46px;height:46px;border-radius:50%;border:1px solid var(--synapse);position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(.9);opacity:0;transition:opacity .25s,transform .25s}
 .clabel:hover::before,.clabel:focus-visible::before{opacity:.8;transform:translate(-50%,-50%) scale(1.6)}
+.clabel.adm{opacity:.62;max-width:140px}
+.clabel.adm span{font-size:11px}
+.clabel.adm:hover,.clabel.adm:focus-visible{opacity:1}
 .card{cursor:pointer}
 .card .open{font-family:var(--f-mono);font-size:11px;color:var(--fire);margin-left:auto}
 
@@ -154,4 +157,29 @@ footer{position:relative;z-index:2;max-width:1180px;margin:0 auto;padding-block:
 .win-foot button small{display:block;font:500 11px var(--f-mono);color:var(--fog);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
 .win-foot button:hover{color:var(--fire)}
 body.locked{overflow:hidden}
+/* admissions work: a smaller grid under the CS projects */
+.subhead{display:flex;flex-direction:column;gap:6px;margin-top:22px}
+.subhead h3{font-family:var(--f-display);font-size:22px;margin:0}
+.subhead p{margin:0;color:var(--fog);max-width:60ch;font-size:15px}
+.cards.small .card{padding:16px 18px;gap:8px}
+.cards.small .card h3{font-size:17px}
+.cards.small .card p{font-size:14px}
+@media (min-width:1100px){.cards.small .card:first-child{grid-column:auto}}
+
+/* up next */
+.upcoming{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.up-card{padding:22px;border:1px dashed var(--line);border-radius:14px;background:var(--glass);backdrop-filter:blur(12px);display:flex;flex-direction:column;gap:10px;min-width:0}
+.up-card h3{font-family:var(--f-display);font-weight:700;font-size:21px;line-height:1.15;margin:0}
+.up-card p{margin:0;color:var(--fog);font-size:15px}
+.up-card a{font-family:var(--f-mono);font-size:12px;color:var(--fire);text-decoration:none;margin-top:auto}
+.up-card .chips span{font-size:11px;padding:4px 10px}
+.status{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--fog);display:flex;align-items:center;gap:8px}
+.status::before{content:"";width:8px;height:8px;border-radius:50%;border:1px solid var(--fog)}
+.status.live{color:var(--fire)}
+.status.live::before{background:var(--fire);border-color:var(--fire);box-shadow:0 0 10px var(--fire);animation:beat 2.4s infinite}
+
+/* economics */
+.econ-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;max-width:900px}
+@media (max-width:860px){.econ-grid{grid-template-columns:1fr}}
+
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}

@@ -2,13 +2,13 @@
 
 A living neural-network portfolio for Md Rakibul Islam Rifath, built with Three.js and WebGL.
 
-Around 2,600 particles form a network that fires as visitors move through it and reshapes for each section: a brain, the name RIFATH, one cluster per project, a helix for experience, and HELLO. Clicking a project cluster or card opens a project window with the challenge, the steps taken, why it mattered and a small interactive demo.
+Around 2,600 particles form a network that fires as visitors move through it and reshapes for each section: a brain, the name RIFATH, one cluster per project (computer science projects larger, admissions work smaller), a loading ring for what's next, crossing supply and demand curves for economics, a helix for experience, and HELLO. Clicking a project cluster or card opens a project window with the challenge, the steps taken, why it mattered and a small interactive demo.
 
 ## Files
 
 - `index.html` – page content
 - `neural.css` – styles
-- `projects.js` – the project list; add an entry here to add a cluster and project window
+- `projects.js` – the project list (`PROJECTS`, with `cat: "cs"` or `"admissions"`) and the "Up next" list (`UPCOMING`); add an entry to add a cluster and project window or an upcoming card
 - `neural.js` – the 3D network, section shapes and project windows
 - `project.html`, `school-projects.html`, `personal-projects.html` and their scripts are the previous design's pages, kept so old links keep working
 
