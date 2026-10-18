@@ -1,13 +1,18 @@
-// Keep the projects heading in step with the number of projects in projects.js.
-(()=>{const w=['Zero','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Eleven','Twelve'][PROJECTS.length]||String(PROJECTS.length);
-  document.getElementById('workTitle').innerHTML=`${w} projects, ${w.toLowerCase()} <em>clusters</em>.`;})();
-const cardsEl=document.getElementById('cards');
+// CS projects get the large cards; admissions work sits in a smaller grid below them.
+const cardsEl=document.getElementById('cards'),cardsAdm=document.getElementById('cardsAdm');
 PROJECTS.forEach((pr,i)=>{
   const a=document.createElement('article');a.className='card';a.tabIndex=0;a.dataset.i=i;a.setAttribute('role','button');a.setAttribute('aria-label','Open project: '+pr.t);
   a.innerHTML=`<span class="kind">${pr.k}</span><h3>${pr.t}</h3><p>${pr.c}</p><div class="path">${pr.p.map(s=>`<span>${s}</span>`).join('<i>→</i>')}<span class="open">Open ↗</span></div>`;
   a.addEventListener('click',e=>openProject(i,e.clientX,e.clientY));
   a.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();const r=a.getBoundingClientRect();openProject(i,r.left+r.width/2,r.top+r.height/2);}});
-  cardsEl.appendChild(a);
+  (pr.cat==='admissions'?cardsAdm:cardsEl).appendChild(a);
+});
+// "Up next": projects in progress or planned, from UPCOMING in projects.js.
+const upEl=document.getElementById('upcoming');
+UPCOMING.forEach(u=>{
+  const a=document.createElement('article');a.className='up-card';
+  a.innerHTML=`<span class="status${u.status==='In progress'?' live':''}">${u.status}</span><h3>${u.t}</h3><p>${u.c}</p><div class="chips">${u.tools.map(t=>`<span>${t}</span>`).join('')}</div>${u.url?`<a href="${u.url}" target="_blank" rel="noreferrer">Repository ↗</a>`:''}`;
+  upEl.appendChild(a);
 });
 
 // ---- project window ----
@@ -22,7 +27,7 @@ function buildDemo(pr){
   const out=el('div','demo-out');out.setAttribute('aria-live','polite');
   const table=(rows,i)=>{const v=rows.filter(r=>i===0||r[2]==='Missing');
     out.innerHTML=`<table><thead><tr><th scope="col">Applicant</th><th scope="col">Document</th><th scope="col">Status</th></tr></thead><tbody>${v.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td class="${r[2]==='Missing'?'miss':''}">${r[2]}</td></tr>`).join('')}</tbody></table><p style="margin-top:10px">${v.length} sample records shown</p>`;};
-  const stepper=(steps)=>{d.append(el('p',null,pr.demo==='steps'?'Step through the build guide a teammate would follow.':'Step through the journey a newly admitted student follows.'));
+  const stepper=(steps,intro)=>{d.append(el('p',null,intro||(pr.demo==='steps'?'Step through the build guide a teammate would follow.':'Step through the journey a newly admitted student follows.')));
     controls(d,steps.map(s=>s[0]),i=>{out.innerHTML=`<h4>${steps[i][1]}</h4><p>${steps[i][2]}</p>`;});d.append(out);out.innerHTML=`<h4>${steps[0][1]}</h4><p>${steps[0][2]}</p>`;};
   if(pr.demo==='table'||pr.demo==='table2'){
     const rows=pr.demo==='table'?[['T-1001','College transcript','Missing'],['T-1002','College transcript','Received'],['T-1003','English proficiency','Missing'],['T-1004','Course prerequisites','Received']]:[['F-2001','High school transcript','Missing'],['F-2002','English proficiency','Received'],['F-2003','High school transcript','Received'],['F-2004','Passport copy','Missing']];
@@ -40,8 +45,10 @@ function buildDemo(pr){
     d.append(el('p',null,'Compare a flawed sample message with the corrected version.'));controls(d,['Before QA','After QA'],run);d.append(out);run(0);
   }else if(pr.demo==='fire'){
     d.append(el('p',null,'This project is the page around you. Send a wave through the network behind this window.'));
-    controls(d,['Fire every neuron','Fire this cluster'],i=>{window.__fire&&window.__fire(i===0?'all':5);out.innerHTML=`<p>${i===0?'Every neuron just fired. Watch the amber wave spread along the synapses.':'Cluster 06 is firing. It keeps pulsing while this window is open.'}</p>`;});
+    controls(d,['Fire every neuron','Fire this cluster'],i=>{const k=PROJECTS.indexOf(pr);window.__fire&&window.__fire(i===0?'all':k);out.innerHTML=`<p>${i===0?'Every neuron just fired. Watch the amber wave spread along the synapses.':`Cluster ${pad(k+1)} is firing. It keeps pulsing while this window is open.`}</p>`;});
     d.append(out);out.innerHTML='<p>Pick a button to fire the network.</p>';
+  }else if(pr.demo==='scenes'){
+    stepper([['Landscape','Open on a 3D landscape','A particle terrain fills the screen as the page loads, with the headline set in oversized type over it.'],['Camera','Move the camera with the scroll','GSAP ScrollTrigger ties each scroll step to a camera move, so reading the page feels like watching shots cut together.'],['Story','Reveal the services','Sections arrive as the camera reaches them, each with its own gradient and particle behavior.'],['Performance','Keep it smooth','Geometry, particle counts and effects are capped so the page stays fluid on an ordinary laptop.']],'Step through the scenes of the site.');
   }else if(pr.demo==='campus'){
     const tabs={Events:['Career Fair · May 20 · University Union','AI Club Workshop · May 22 · Riverside Hall','Finals Wellness Night · May 25 · Student Center'],
       'Study groups':['CSC 131 Study Group','Calculus Review Group','Philosophy Reading Group'],
@@ -165,11 +172,15 @@ window.openProject=openProject;
   }
   const centers=[];
   function shapeClusters(){
-    centers.length=0;const R=small?3:5.2;
-    const NP=PROJECTS.length;for(let k=0;k<NP;k++){const a=k/NP*6.283+.4;centers.push([Math.cos(a)*R,Math.sin(a)*R*.55,Math.sin(a*2)*1.5]);}
-    for(let i=0;i<N;i++){const k=i%(NP+1);
-      if(k===NP){tgt.set([rnd(-9,9),rnd(-5,5),rnd(-5,3)],i*3);cluster[i]=-1;continue;}
-      const c=centers[k],r=Math.pow(Math.random(),.6)*(small?.9:1.2),a=Math.random()*6.283,b=Math.acos(2*Math.random()-1);
+    // CS projects form large clusters on an inner ring; admissions work forms smaller ones on an outer ring.
+    centers.length=0;const R=small?3:5.2,NP=PROJECTS.length,isCS=k=>PROJECTS[k].cat!=='admissions';
+    const cs=PROJECTS.map((p,k)=>k).filter(isCS),adm=PROJECTS.map((p,k)=>k).filter(k=>!isCS(k));
+    cs.forEach((k,j)=>{const a=j/cs.length*6.283+.9;centers[k]=[Math.cos(a)*R*.5,Math.sin(a)*R*.42,Math.sin(a*2)*.8+1];});
+    adm.forEach((k,j)=>{const a=j/adm.length*6.283+.3;centers[k]=[Math.cos(a)*R*1.08,Math.sin(a)*R*.62,Math.sin(a*2)*1.5-.8];});
+    const bag=[];PROJECTS.forEach((p,k)=>{for(let w=isCS(k)?3:1;w--;)bag.push(k);});bag.push(-1,-1);   // particle share per cluster, plus loose field
+    for(let i=0;i<N;i++){const k=bag[i%bag.length];
+      if(k<0){tgt.set([rnd(-9,9),rnd(-5,5),rnd(-5,3)],i*3);cluster[i]=-1;continue;}
+      const c=centers[k],r=Math.pow(Math.random(),.6)*(small?.9:1.2)*(isCS(k)?1.25:.6),a=Math.random()*6.283,b=Math.acos(2*Math.random()-1);
       tgt.set([c[0]+r*Math.sin(b)*Math.cos(a),c[1]+r*Math.sin(b)*Math.sin(a),c[2]+r*Math.cos(b)],i*3);cluster[i]=k;}
   }
   function shapeHelix(){
@@ -178,10 +189,25 @@ window.openProject=openProject;
       const r=strand===2?rnd(0,1.6):1.6;
       tgt.set([ox+(t-.5)*len,Math.cos(a)*r+rnd(-.08,.08),Math.sin(a)*r+rnd(-.08,.08)],i*3);cluster[i]=-1;}
   }
-  const SHAPES={brain:shapeBrain,name:()=>shapeText('RIFATH',small?4.2:4.1),clusters:shapeClusters,helix:shapeHelix,hello:()=>shapeText('HELLO',small?3.2:1.6)};
+  function shapeRing(){ // a loading ring: a torus with a bright arc, for work that's still in progress
+    const R=small?2.2:3.2,r=small?.35:.5,ox=small?0:viewW()*.18;
+    for(let i=0;i<N;i++){const u=Math.random()*6.283,v=Math.random()*6.283,rr=r*Math.sqrt(Math.random());
+      tgt.set([ox+(R+rr*Math.cos(v))*Math.cos(u),(R+rr*Math.cos(v))*Math.sin(u),rr*Math.sin(v)],i*3);cluster[i]=-1;}
+  }
+  function shapeMarket(){ // supply and demand: two crossing lines, axes, and a dense equilibrium point
+    const w=small?5.6:8,h=small?4.4:5.6,ox=small?0:viewW()*.12,x0=ox-w/2,y0=-h/2;
+    for(let i=0;i<N;i++){const k=i%10,t=Math.random();let x,y;
+      if(k<3){x=x0+t*w;y=y0+h*(.1+.8*t);}           // supply slopes up
+      else if(k<6){x=x0+t*w;y=y0+h*(.9-.8*t);}      // demand slopes down
+      else if(k<7){x=x0;y=y0+t*h;}                  // price axis
+      else if(k<8){x=x0+t*w;y=y0;}                  // quantity axis
+      else{const a=Math.random()*6.283,rr=Math.pow(Math.random(),2)*.45;x=x0+w/2+Math.cos(a)*rr;y=y0+h/2+Math.sin(a)*rr;} // equilibrium
+      tgt.set([x+rnd(-.04,.04),y+rnd(-.04,.04),rnd(-.25,.25)],i*3);cluster[i]=-1;}
+  }
+  const SHAPES={ring:shapeRing,market:shapeMarket,brain:shapeBrain,name:()=>shapeText('RIFATH',small?4.2:4.1),clusters:shapeClusters,helix:shapeHelix,hello:()=>shapeText('HELLO',small?3.2:1.6)};
   let current='brain';SHAPES.brain();
   if(reduce)pos.set(tgt);
-  const LAYERS={brain:'input',name:'profile',clusters:'projects',helix:'experience',hello:'output'};
+  const LAYERS={brain:'input',name:'profile',clusters:'projects',ring:'up next',market:'economics',helix:'experience',hello:'output'};
   function setShape(s){if(s===current)return;current=s;SHAPES[s]();
     for(let i=0;i<NODES;i++)if(Math.random()<.5)act[i]=1; // a wave of firing on every morph
     document.getElementById('rLayer').textContent=LAYERS[s];
@@ -202,7 +228,7 @@ window.openProject=openProject;
 
   // clickable cluster labels, shown while the constellation stage is on screen
   const labelsEl=document.getElementById('clabels'),labelBtns=[];
-  PROJECTS.forEach((pr,k)=>{const b=document.createElement('button');b.type='button';b.className='clabel';b.innerHTML=`<b>${pad(k+1)}</b><span>${pr.t}</span>`;
+  PROJECTS.forEach((pr,k)=>{const b=document.createElement('button');b.type='button';b.className='clabel'+(pr.cat==='admissions'?' adm':'');b.innerHTML=`<b>${pad(k+1)}</b><span>${pr.t}</span>`;
     b.setAttribute('aria-label','Open project: '+pr.t);
     b.addEventListener('click',e=>openProject(k,e.clientX,e.clientY));
     b.addEventListener('mouseenter',()=>{litCluster=k;});b.addEventListener('mouseleave',()=>{if(openIdx!==k)litCluster=-1;});
