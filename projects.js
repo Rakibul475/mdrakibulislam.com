@@ -40,9 +40,9 @@ const PROJECTS=[
   did:["Collected queries and fixes from existing work.","Turned them into a repeatable, step-by-step build guide.","Added validation steps and known limitations.","Shared the guide so teammates could build queries on their own."],
   imp:"One-off troubleshooting became shared team knowledge.",
   tools:["Documentation","Process design","Slate CRM","Enablement"],demo:"steps"},
- {id:"campusconnect",k:"React · Vite · Personal build",t:"CampusConnect",c:"A Sac State inspired student hub where students can find campus events, join study groups and message each other.",p:["Student","Hub","Community"],
-  ch:"Campus life is scattered across flyers, group chats and email, so students miss events and struggle to find study partners.",
-  did:["Designed one hub with four areas: events, study groups, messages and notifications.","Built it as a React app with Vite, using component state for every interaction.","Added live event search, study group creation and a simple message feed.","Deployed it to Vercel and fixed the build dependencies along the way."],
-  imp:"It turns what I saw at the front desk, students looking for connection and information, into a product idea I built myself.",
-  tools:["React","Vite","JavaScript","CSS","Vercel"],demo:"campus",url:"https://github.com/Rakibul475/CampusConnect"}
+ {id:"campusconnect",k:"React · Supabase · Personal build",t:"CampusConnect",c:"Private group chats for your classes, with the professor in the loop. A Sac State inspired student project.",p:["Professor","Class","Group chat"],
+  ch:"Class group work happens in scattered group chats the professor never sees, and students in one group should not be able to read another group's discussion.",
+  did:["Let professors create a class with a 6-character join code or invite link, add groups with an optional size limit, and move or remove students.","Built real-time group chats in React 19 and Vite on Supabase auth, Postgres and realtime.","Enforced who sees what in the database with row-level security: students see only their own group, the professor sees every group and the roster.","Covered the access rules with database permission tests, and ran lint, unit tests and the build on every push with GitHub Actions before deploying to Vercel."],
+  imp:"It turns a problem I saw around campus, group work that is hard to follow and hard to keep private, into a working product with privacy enforced where it counts.",
+  tools:["React","Vite","Supabase","Postgres RLS","Vitest","GitHub Actions","Vercel"],demo:"campus",url:"https://github.com/Rakibul475/CampusConnect"}
 ];
