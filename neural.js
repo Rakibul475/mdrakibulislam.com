@@ -43,12 +43,11 @@ function buildDemo(pr){
     controls(d,['Fire every neuron','Fire this cluster'],i=>{window.__fire&&window.__fire(i===0?'all':5);out.innerHTML=`<p>${i===0?'Every neuron just fired. Watch the amber wave spread along the synapses.':'Cluster 06 is firing. It keeps pulsing while this window is open.'}</p>`;});
     d.append(out);out.innerHTML='<p>Pick a button to fire the network.</p>';
   }else if(pr.demo==='campus'){
-    const tabs={Events:['Career Fair · May 20 · University Union','AI Club Workshop · May 22 · Riverside Hall','Finals Wellness Night · May 25 · Student Center'],
-      'Study groups':['CSC 131 Study Group','Calculus Review Group','Philosophy Reading Group'],
-      Messages:['Maya: Anyone want to review UML diagrams?','Alex: I can meet after class.'],
-      Notifications:['Career Fair starts May 20.','You joined CSC 131 Study Group.','New message from Maya.']};
+    const tabs={Professor:['Group names and sizes: visible','Who is in each group: visible','Every group\'s messages: visible','Class roster: visible'],
+      'Student in the group':['Group names and sizes: visible','Who is in the group: visible','The group\'s messages: visible','Class roster: hidden'],
+      'Other students':['Group names and sizes: visible','Who is in the group: hidden','The group\'s messages: hidden','Class roster: hidden']};
     const names=Object.keys(tabs);const show=i=>{out.innerHTML=`<h4>${names[i]}</h4><ul>${tabs[names[i]].map(t=>`<li>${t}</li>`).join('')}</ul>`;};
-    d.append(el('p',null,'Click through the four areas of the app, using the sample data from the real code.'));controls(d,names,show);d.append(out);show(0);
+    d.append(el('p',null,'Switch roles to see what each person can access. These rules are enforced by the database, not just the website.'));controls(d,names,show);d.append(out);show(0);
   }else{
     stepper([['Population','Define the population','Specify the applicant type and term before choosing any fields.'],['Fields','Select fields','Include a unique applicant ID, the document name and the checklist status.'],['Validation','Validate results','Compare a small sample with source records, and investigate blanks and duplicate rows.'],['Documentation','Document the workflow','Record assumptions, field definitions, validation steps and known limitations.']]);
   }
