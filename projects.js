@@ -2,7 +2,7 @@
 // To add a project, append an object with the same fields:
 //   id (url-safe slug), k (kind label), t (title), c (one-line summary), p (3-step signal path),
 //   ch (the challenge), did (4 steps), imp (why it mattered), tools, demo, url (optional repo link).
-// demo picks an interactive sample in neural.js: table, table2, message, journey, qa, fire, steps, campus.
+// demo picks an interactive sample in neural.js: table, table2, message, journey, qa, fire, steps, campus, forecast.
 // Projects without a matching demo fall back to the "steps" walkthrough.
 const PROJECTS=[
  {id:"transfer-checklist",k:"Slate CRM · Query architecture",t:"Transfer Checklist Intelligence",c:"Built and debugged a transfer-applicant query that surfaces checklist items, prompt values, unique IDs, statuses and descriptions for faster staff review.",p:["Applicant","Query","Staff review"],
@@ -44,5 +44,10 @@ const PROJECTS=[
   ch:"Class group work happens in scattered group chats the professor never sees, and students in one group should not be able to read another group's discussion.",
   did:["Let professors create a class with a 6-character join code or invite link, add groups with an optional size limit, and move or remove students.","Built real-time group chats in React 19 and Vite on Supabase auth, Postgres and realtime.","Enforced who sees what in the database with row-level security: students see only their own group, the professor sees every group and the roster.","Covered the access rules with database permission tests, and ran lint, unit tests and the build on every push with GitHub Actions before deploying to Vercel."],
   imp:"It turns a problem I saw around campus, group work that is hard to follow and hard to keep private, into a working product with privacy enforced where it counts.",
-  tools:["React","Vite","Supabase","Postgres RLS","Vitest","GitHub Actions","Vercel"],demo:"campus",url:"https://github.com/Rakibul475/CampusConnect"}
+  tools:["React","Vite","Supabase","Postgres RLS","Vitest","GitHub Actions","Vercel"],demo:"campus",url:"https://github.com/Rakibul475/CampusConnect"},
+ {id:"stock-forecaster",k:"Python · Machine learning",t:"Stock Price Forecaster",c:"Tested whether machine learning can predict tomorrow's stock price better than the simplest guess, using ten years of public daily prices.",p:["Prices","Model","Forecast"],
+  ch:"Stock prediction models often look accurate on a chart, but that can be because they just copy yesterday's price. I wanted to see if a model actually adds anything.",
+  did:["Collected daily adjusted prices for AAPL, MSFT, IBM, SBUX and the S&P 500 from 2007 to 2016.","Built features a trader would know at the close: recent returns, volatility, distance from the 50-day average and the market's move.","Trained Ridge regression and gradient boosting, and compared them with a naive forecast (tomorrow = today) and a drift forecast.","Held out the final 250 trading days and scored every model one day ahead on data it had never seen."],
+  imp:"None of the models beat the naive forecast, and gradient boosting was slightly worse on all five series. That is the honest answer for daily prices, and knowing when a model adds nothing matters as much as building it.",
+  tools:["Python","pandas","scikit-learn","Gradient boosting","matplotlib"],demo:"forecast",url:"https://github.com/Rakibul475/mdrakibulislam.com/tree/main/projects/stock-forecaster"}
 ];

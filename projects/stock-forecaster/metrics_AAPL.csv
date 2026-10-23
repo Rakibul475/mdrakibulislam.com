@@ -1,0 +1,5 @@
+,MAE $,RMSE $,MAPE %,Direction hit %
+Naive (tomorrow = today),1.479,1.95,1.309,
+Drift (avg daily return),1.493,1.963,1.321,45.6
+Ridge regression,1.489,1.959,1.317,42.8
+Gradient boosting,1.573,2.089,1.398,44.0

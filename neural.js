@@ -18,7 +18,7 @@ function el(tag,cls,html){const e=document.createElement(tag);if(cls)e.className
 function controls(box,names,update){const row=el('div','demo-controls');names.forEach((n,i)=>{const b=el('button');b.type='button';b.textContent=n;b.setAttribute('aria-pressed',String(i===0));
   b.onclick=()=>{row.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));update(i);};row.append(b);});box.append(row);}
 function buildDemo(pr){
-  const d=el('div','demo');d.append(el('span','tag',pr.url?'Try it · sample data from the app':'Try it · sample data, not a live Slate connection'));
+  const d=el('div','demo');d.append(el('span','tag',pr.demo==='forecast'?'Try it · real results from the holdout test':pr.url?'Try it · sample data from the app':'Try it · sample data, not a live Slate connection'));
   const out=el('div','demo-out');out.setAttribute('aria-live','polite');
   const table=(rows,i)=>{const v=rows.filter(r=>i===0||r[2]==='Missing');
     out.innerHTML=`<table><thead><tr><th scope="col">Applicant</th><th scope="col">Document</th><th scope="col">Status</th></tr></thead><tbody>${v.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td class="${r[2]==='Missing'?'miss':''}">${r[2]}</td></tr>`).join('')}</tbody></table><p style="margin-top:10px">${v.length} sample records shown</p>`;};
@@ -48,6 +48,13 @@ function buildDemo(pr){
       'Other students':['Group names and sizes: visible','Who is in the group: hidden','The group\'s messages: hidden','Class roster: hidden']};
     const names=Object.keys(tabs);const show=i=>{out.innerHTML=`<h4>${names[i]}</h4><ul>${tabs[names[i]].map(t=>`<li>${t}</li>`).join('')}</ul>`;};
     d.append(el('p',null,'Switch roles to see what each person can access. These rules are enforced by the database, not just the website.'));controls(d,names,show);d.append(out);show(0);
+  }else if(pr.demo==='forecast'){
+    // RMSE relative to the naive forecast on the last 250 trading days (from rmse_vs_naive_all_tickers.csv)
+    const res={AAPL:[1.007,1.004,1.071],MSFT:[.999,1.005,1.036],IBM:[1.001,1.004,1.020],SBUX:[.999,.995,1.008],'S&P 500':[1.001,1.001,1.030]};
+    const models=['Drift','Ridge regression','Gradient boosting'],names=Object.keys(res);
+    const show=i=>{const v=res[names[i]],pct=x=>{const p=Math.round((x-1)*1000)/10;return p===0?'same as naive':p>0?`${p}% worse`:`${-p}% better`;};
+      out.innerHTML=`<table><thead><tr><th scope="col">Model</th><th scope="col">Error vs naive</th><th scope="col">Result</th></tr></thead><tbody><tr><td>Naive (tomorrow = today)</td><td>1.000</td><td>baseline</td></tr>${v.map((x,j)=>`<tr><td>${models[j]}</td><td>${x.toFixed(3)}</td><td class="${x>1.005?'miss':''}">${pct(x)}</td></tr>`).join('')}</tbody></table><p style="margin-top:10px">Error is RMSE divided by the naive forecast's RMSE. Below 1.000 means the model beat naive.</p>`;};
+    d.append(el('p',null,'Pick a stock to see how each model did against the naive forecast.'));controls(d,names,show);d.append(out);show(0);
   }else{
     stepper([['Population','Define the population','Specify the applicant type and term before choosing any fields.'],['Fields','Select fields','Include a unique applicant ID, the document name and the checklist status.'],['Validation','Validate results','Compare a small sample with source records, and investigate blanks and duplicate rows.'],['Documentation','Document the workflow','Record assumptions, field definitions, validation steps and known limitations.']]);
   }

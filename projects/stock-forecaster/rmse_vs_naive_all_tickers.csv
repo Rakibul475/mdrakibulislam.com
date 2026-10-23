@@ -1,0 +1,6 @@
+,Naive (tomorrow = today),Drift (avg daily return),Ridge regression,Gradient boosting
+MSFT,1.0,0.999,1.005,1.036
+IBM,1.0,1.001,1.004,1.02
+SBUX,1.0,0.999,0.995,1.008
+AAPL,1.0,1.007,1.004,1.071
+GSPC,1.0,1.001,1.001,1.03
